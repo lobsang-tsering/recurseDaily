@@ -1,0 +1,116 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+const posts = (await getCollection("leetcode")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-dark: #1e40af;
+        --color-text: #333;
+        --color-heading: #1f2937;
+        --color-muted: #6b7280;
+        --color-border: #e5e7eb;
+        --color-bg: #f9fafb;
+        --color-table-header: #f3f4f6;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      th {
+        background: var(--color-table-header);
+        color: var(--color-heading);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85em;
+      }
+
+      td {
+        font-size: 0.95em;
+      }
+
+      a {
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+        color: var(--color-primary-dark);
+      }
+
+      @media (max-width: 768px) {
+        th,
+        td {
+          padding: 10px;
+          font-size: 0.9em;
+        }
+
+        nav a {
+          display: inline-block;
+          margin-bottom: 5px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Link</th>
+          </tr>
+          <tbody>
+            {
+              posts.map((post, index) => (
+                <tr>
+                  <>
+                    <td>{index}</td>
+                    <td>{post.data.title}</td>
+                  </>
+                  <td>{post.data.difficulty}</td>
+                  <td>
+                    <a href={`/leetcode/${post.slug}/`}>View Problem</a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </thead>
+      </table>
+    </main>
+    <Footer />
+  </body>
+</html>
