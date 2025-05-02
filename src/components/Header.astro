@@ -15,12 +15,15 @@ import { SITE_TITLE } from "../consts";
         {SITE_TITLE}
       </a>
     </h2>
-    <div class="internal-links">
+    <div class="topnav" id="myTopnav">
       <HeaderLink href={`${import.meta.env.BASE_URL}/`}>Home</HeaderLink>
       <HeaderLink href={`${import.meta.env.BASE_URL}/leetcode`}
         >Leetcode</HeaderLink
       >
       <HeaderLink href={`${import.meta.env.BASE_URL}/about`}>About</HeaderLink>
+      <a href="javascript:void(0);" class="icon" id="menuToggle">
+        <i class="fa fa-bars"></i>
+      </a>
     </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/lobsangtsering/" target="_blank">
@@ -38,37 +41,6 @@ import { SITE_TITLE } from "../consts";
           ></path>
         </svg>
       </a>
-
-      <a href="https://x.com/real_lobsang" target="_blank">
-        <span class="sr-only">Follow Lobsang on Twitter</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          fill="currentColor"
-          class="bi bi-twitter-x"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"
-          ></path>
-        </svg>
-      </a>
-
-      <a href="https://github.com/lobsang-tsering/recurseDaily" target="_blank">
-        <span class="sr-only">Go to Lobsang's repo</span>
-        <svg
-          viewBox="0 0 16 16"
-          aria-hidden="true"
-          width="32"
-          height="32"
-          astro-icon="social/github"
-          ><path
-            fill="currentColor"
-            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-          ></path></svg
-        >
-      </a>
     </div>
   </nav>
 </header>
@@ -79,6 +51,7 @@ import { SITE_TITLE } from "../consts";
     background: white;
     box-shadow: 0 2px 8px rgba(var(--black), 5%);
   }
+
   h2 {
     margin: 0;
     font-size: 1em;
@@ -93,6 +66,7 @@ import { SITE_TITLE } from "../consts";
     align-items: center;
     justify-content: space-between;
   }
+
   nav a {
     padding: 1em 0.5em;
     color: var(--black);
@@ -109,27 +83,191 @@ import { SITE_TITLE } from "../consts";
   }
 
   .site-title {
-    display: flex; /* Use flexbox to align contents */
-    align-items: center; /* Vertically center text and image */
+    display: flex;
+    align-items: center;
   }
 
   .site-title-link {
-    display: flex; /* Make the <a> flex to keep text and image inline */
-    align-items: center; /* Vertically center contents */
-    text-decoration: none; /* Remove underline from link */
-    color: inherit; /* Inherit text color */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
   }
 
   .site-logo {
-    width: 32px; /* Match favicon size */
+    width: 32px;
     height: 32px;
     margin-right: 0.25rem;
-    vertical-align: middle; /* Fallback for older browsers */
+    vertical-align: middle;
   }
 
-  @media (max-width: 720px) {
+  .topnav {
+    overflow: hidden;
+  }
+
+  .topnav .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+  }
+
+  @media screen and (max-width: 720px) {
+    .topnav a:not(.icon) {
+      display: none;
+    }
+    .topnav a.icon {
+      float: right;
+      display: block;
+    }
+    nav {
+      flex-direction: column;
+    }
+
+    /* Animation for the responsive menu */
+    .topnav.responsive {
+      animation: slideDown 0.3s ease-in-out forwards;
+    }
+
+    /* This only affects the non-responsive state */
+    .topnav:not(.responsive) a:not(.icon) {
+      animation: fadeOut 0.3s ease forwards;
+    }
+
+    @keyframes slideDown {
+      from {
+        max-height: 0;
+        opacity: 0;
+      }
+      to {
+        max-height: 300px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+  }
+
+  @media screen and (max-width: 720px) {
+    .topnav.responsive {
+      margin: 0 auto;
+    }
+    .topnav.responsive .icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .topnav.responsive a:not(.icon) {
+      float: none;
+      display: block;
+      text-align: left;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    /* Animation for closing the menu */
+    .topnav.closing a:not(.icon) {
+      animation: fadeOut 0.3s ease forwards;
+    }
+    .topnav.closing {
+      animation: slideUp 0.3s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        max-height: 300px;
+        opacity: 1;
+      }
+      to {
+        max-height: 0;
+        opacity: 0;
+      }
+    }
+
     .social-links {
       display: none;
     }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menuToggle");
+    if (!menuToggle) {
+      console.error("Menu toggle element not found");
+      return;
+    }
+
+    const icon = menuToggle.querySelector("i");
+    if (!icon) {
+      console.error("Icon element not found in menu toggle");
+      return;
+    }
+
+    const topnav = document.getElementById("myTopnav");
+
+    // Function to close the menu
+    const closeMenu = () => {
+      if (topnav && topnav.classList.contains("responsive")) {
+        // Add a class to trigger the close animation
+        topnav.classList.add("closing");
+
+        // After animation completes, remove both classes
+        setTimeout(() => {
+          topnav.className = "topnav";
+          if (icon) {
+            icon.classList.remove("fa-times");
+            icon.classList.add("fa-bars");
+          }
+        }, 300); // Match this to the animation duration
+      }
+    };
+
+    menuToggle.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent this click from bubbling to document
+      console.log("Menu toggle clicked");
+      if (topnav) {
+        if (topnav.className === "topnav") {
+          topnav.className += " responsive";
+          icon.classList.remove("fa-bars");
+          icon.classList.add("fa-times");
+        } else {
+          closeMenu();
+        }
+      } else {
+        console.error("Topnav element not found");
+      }
+    });
+
+    // Prevent clicks on the navigation menu from closing it
+    if (topnav) {
+      topnav.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    // Close the menu when clicking anywhere else on the document
+    document.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+</script>
