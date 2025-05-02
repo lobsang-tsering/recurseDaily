@@ -6,15 +6,21 @@ import { SITE_TITLE } from "../consts";
 <header>
   <nav>
     <h2 class="site-title">
-      <a href="/" class="site-title-link">
-        <img src="/favicon-32x32.png" alt="Site Logo" class="site-logo" />
+      <a href={`${import.meta.env.BASE_URL}/`} class="site-title-link">
+        <img
+          src={`${import.meta.env.BASE_URL}/favicon-32x32.png`}
+          alt="Site Logo"
+          class="site-logo"
+        />
         {SITE_TITLE}
       </a>
     </h2>
     <div class="internal-links">
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/leetcode">Leetcode</HeaderLink>
-      <HeaderLink href="/about">About</HeaderLink>
+      <HeaderLink href={`${import.meta.env.BASE_URL}/`}>Home</HeaderLink>
+      <HeaderLink href={`${import.meta.env.BASE_URL}/leetcode`}
+        >Leetcode</HeaderLink
+      >
+      <HeaderLink href={`${import.meta.env.BASE_URL}/about`}>About</HeaderLink>
     </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/lobsangtsering/" target="_blank">
@@ -49,7 +55,7 @@ import { SITE_TITLE } from "../consts";
         </svg>
       </a>
 
-      <a href="https://github.com/withastro/astro" target="_blank">
+      <a href="https://github.com/lobsang-tsering/recurseDaily" target="_blank">
         <span class="sr-only">Go to Lobsang's repo</span>
         <svg
           viewBox="0 0 16 16"

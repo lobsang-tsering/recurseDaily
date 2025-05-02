@@ -17,4 +17,5 @@ const { Content } = await post.render();
 
 <BlogPost {...post.data}>
   <Content />
+  <a href={`${import.meta.env.BASE_URL}/`}>Back to Home</a>
 </BlogPost>
