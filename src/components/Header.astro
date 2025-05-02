@@ -44,12 +44,33 @@ import { SITE_TITLE } from "../consts";
     </div>
   </nav>
 </header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const checkbox = document.getElementById(
+      "nav-toggle"
+    ) as HTMLInputElement | null;
+    const menu = document.querySelector(".menu-items") as HTMLElement | null;
+
+    if (checkbox && menu) {
+      document.addEventListener("click", (event: MouseEvent) => {
+        const target = event.target as Element;
+        const isClickInsideMenu = menu.contains(target);
+        const isClickOnToggle = target.closest(".hamburger-lines, #nav-toggle");
+
+        if (!isClickInsideMenu && !isClickOnToggle && checkbox.checked) {
+          checkbox.checked = false;
+        }
+      });
+    }
+  });
+</script>
+
 <style>
-  header {
+  * {
     margin: 0;
-    padding: 0 1em;
+    padding: 0 0.1em;
     background: white;
-    box-shadow: 0 2px 8px rgba(var(--black), 5%);
   }
 
   h2 {
@@ -57,18 +78,14 @@ import { SITE_TITLE } from "../consts";
     font-size: 1em;
   }
 
-  h2 a,
-  h2 a.active {
-    text-decoration: none;
-  }
   nav {
+    margin: auto;
     display: flex;
-    align-items: center;
     justify-content: space-between;
   }
 
   nav a {
-    padding: 1em 0.5em;
+    padding: 0.8em 0.5em;
     color: var(--black);
     border-bottom: 4px solid transparent;
     text-decoration: none;
@@ -122,6 +139,11 @@ import { SITE_TITLE } from "../consts";
     }
     nav {
       flex-direction: column;
+    }
+
+    nav a.active {
+      text-decoration: none;
+      border-bottom: none;
     }
 
     /* Animation for the responsive menu */
@@ -204,6 +226,16 @@ import { SITE_TITLE } from "../consts";
     }
 
     .social-links {
+      display: none;
+    }
+
+    .site-title.logo {
+      position: absolute;
+      top: 5px;
+      left: 15px;
+    }
+
+    .nav-container input[type="checkbox"]:checked ~ .logo {
       display: none;
     }
   }
