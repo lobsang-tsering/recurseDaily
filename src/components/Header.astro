@@ -1,6 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
+const currentPath = Astro.url.pathname;
 ---
 
 <header>
@@ -16,11 +17,18 @@ import { SITE_TITLE } from "../consts";
       </a>
     </h2>
     <div class="topnav" id="myTopnav">
-      <HeaderLink href={`${import.meta.env.BASE_URL}/`}>Home</HeaderLink>
-      <HeaderLink href={`${import.meta.env.BASE_URL}/leetcode`}
-        >Leetcode</HeaderLink
+      <HeaderLink
+        href={`${import.meta.env.BASE_URL}/`}
+        class={currentPath === "/" ? "active" : ""}>Home</HeaderLink
       >
-      <HeaderLink href={`${import.meta.env.BASE_URL}/about`}>About</HeaderLink>
+      <HeaderLink
+        href={`${import.meta.env.BASE_URL}/leetcode`}
+        class={currentPath === "/" ? "active" : ""}>Leetcode</HeaderLink
+      >
+      <HeaderLink
+        href={`${import.meta.env.BASE_URL}/about`}
+        class={currentPath === "/" ? "active" : ""}>About</HeaderLink
+      >
       <a href="javascript:void(0);" class="icon" id="menuToggle">
         <i class="fa fa-bars"></i>
       </a>
@@ -94,6 +102,7 @@ import { SITE_TITLE } from "../consts";
     text-decoration: none;
     border-bottom-color: var(--accent);
   }
+
   .social-links,
   .social-links a {
     display: flex;
