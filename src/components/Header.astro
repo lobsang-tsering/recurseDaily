@@ -26,6 +26,10 @@ const currentPath = Astro.url.pathname;
         class={currentPath === "/" ? "active" : ""}>Leetcode</HeaderLink
       >
       <HeaderLink
+        href={`${import.meta.env.BASE_URL}/blogs`}
+        class={currentPath === "/" ? "active" : ""}>blog</HeaderLink
+      >
+      <HeaderLink
         href={`${import.meta.env.BASE_URL}/about`}
         class={currentPath === "/" ? "active" : ""}>About</HeaderLink
       >
