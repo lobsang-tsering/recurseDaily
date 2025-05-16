@@ -1,5 +1,5 @@
 ---
-title: "container-with-most-water"
+title: "Move Zeroes"
 pubDate: "May 16 2025"
 heroImage: "/blog-placeholder-3.jpg"
 difficulty: "Easy"

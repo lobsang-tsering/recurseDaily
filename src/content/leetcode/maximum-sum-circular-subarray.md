@@ -1,5 +1,5 @@
 ---
-title: "container-with-most-water"
+title: "Max Subarray Sum Circular"
 pubDate: "May 16 2025"
 heroImage: "/blog-placeholder-3.jpg"
 difficulty: "Easy"
