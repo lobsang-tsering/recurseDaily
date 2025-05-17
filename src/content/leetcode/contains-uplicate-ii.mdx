@@ -1,0 +1,29 @@
+---
+title: "Contains Duplicate II"
+pubDate: "May 17 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: "Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k."
+topics: ["array", "two pointers", "sliding window"]
+---
+
+
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+       HashSet<Integer> window = new HashSet<Integer>();
+       int L = 0;
+
+       for(int R = 0; R < nums.length; R++) {
+         if(R - L > k) {
+            window.remove(nums[L]);
+            L++;
+         }
+
+         if(!window.add(nums[R])) return true;
+       }
+
+       return false;
+    }
+}
+```
