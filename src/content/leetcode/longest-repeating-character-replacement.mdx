@@ -1,0 +1,39 @@
+---
+title: "Longest Repeating Character Replacement"
+pubDate: "May 18 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Medium"
+description: "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times."
+topics: ["array", "two pointers", "variable size sliding window"]
+---
+
+
+```java
+class Solution {
+    public int characterReplacement(String s, int k) {
+        Map<Character, Integer> map = new HashMap<>();
+        int max = 0;
+        int maxFreq = 0;
+        int L = 0;
+
+        for(int R = 0; R < s.length(); R++) {
+            char c =  s.charAt(R);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+            maxFreq = Math.max(maxFreq, map.get(c));
+            
+            int windowSize = R - L + 1;
+
+            if(windowSize - maxFreq > k) {
+                char lc = s.charAt(L);
+                map.put(lc, map.get(lc) - 1);
+                L++;
+            }
+
+            max = Math.max(max, R - L + 1);
+        }
+
+        return max;
+    }
+}
+
+```

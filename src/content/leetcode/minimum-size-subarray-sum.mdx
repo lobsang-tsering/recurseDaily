@@ -1,0 +1,29 @@
+---
+title: "Minimum Size Subarray Sum"
+pubDate: "May 18 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Medium"
+description: "Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead."
+topics: ["array", "two pointers", "variable size sliding window"]
+---
+
+
+```java
+
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int L = 0; 
+        int sum = 0;
+        int result = Integer.MAX_VALUE;
+        for (int R = 0;  R < nums.length; R++) {
+            sum += nums[R];
+
+            while(sum >= target) {
+                result = Math.min(R - L + 1, result);
+                sum -= nums[L++];
+            }
+        }
+        return result == Integer.MAX_VALUE ? 0: result; 
+    }
+}
+```

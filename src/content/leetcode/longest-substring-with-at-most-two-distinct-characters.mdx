@@ -1,0 +1,43 @@
+---
+title: "Longest Substring with At Most Two Distinct Characters"
+pubDate: "May 18 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Medium"
+description: "Given a string s, return the length of the longest substring that contains at most two distinct characters."
+topics: ["array", "two pointers", "variable size sliding window"]
+---
+
+
+```java
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.isEmpty()) return 0;
+        
+        Map<Character, Integer> charCount = new HashMap<>();
+        int left = 0;
+        int maxLength = 0;
+        
+        for (int right = 0; right < s.length(); right++) {
+            // Add the current character to the map
+            char current = s.charAt(right);
+            charCount.put(current, charCount.getOrDefault(current, 0) + 1);
+            
+            // Shrink the window if we have more than 2 distinct characters
+            while (charCount.size() > 2) {
+                char leftChar = s.charAt(left);
+                charCount.put(leftChar, charCount.get(leftChar) - 1);
+                if (charCount.get(leftChar) == 0) {
+                    charCount.remove(leftChar);
+                }
+                left++;
+            }
+            
+            // Update the maximum length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
+
+```
