@@ -35,8 +35,19 @@ const blogs = defineCollection({
   }),
 });
 
+const posts = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.coerce.date(),
+    description: z.string(),
+    topics: z.array(z.string()),
+  }),
+});
+
 export const collections = {
   leetcode,
   me: meCollection,
   blogs: blogs,
+  posts: posts,
 };
