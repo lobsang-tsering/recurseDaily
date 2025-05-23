@@ -124,7 +124,7 @@ hr {
 /* Responsive Design */
 @media (max-width: 720px) {
   body { font-size: 18px; }
-  main { padding: 1em;  width: 80%;}
+  main { padding: 1em;  width: 100%;}
 }
 
 /* Screen Reader Only */
