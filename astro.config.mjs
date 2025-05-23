@@ -15,7 +15,7 @@ export default defineConfig({
         dark: "dracula",
       },
       langs: [],
-      wrap: true,
+      wrap: false,
       transformers: [],
     },
   },
