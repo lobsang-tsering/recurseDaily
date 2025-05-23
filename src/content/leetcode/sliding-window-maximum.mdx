@@ -1,0 +1,39 @@
+---
+title: "Sliding Window Maximum"
+pubDate: "May 16 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position."
+topics: ["array", "two pointers", "sliding window"]
+---
+
+
+```java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        int[] result = new int[nums.length - k + 1];
+        int i = 0;
+        int l = 0;
+        for(int j=0; j<nums.length; j++) {
+            while(!deque.isEmpty() && deque.peekLast() < nums[j]) {
+                deque.removeLast();
+            }
+            deque.add(nums[j]);
+
+            if(j - i + 1 >= k) {
+                int curr_max = deque.peekFirst();
+                if(nums[i] == curr_max) {
+                    deque.removeFirst();
+                }
+
+                result[l++] = curr_max;
+                i++;
+            }
+        }
+
+        return result;
+    }
+}
+
+```
