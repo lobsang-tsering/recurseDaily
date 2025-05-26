@@ -1,0 +1,36 @@
+---
+title: "Linked List Cycle"
+difficulty: "Easy"
+heroImage: "/blog-placeholder-3.jpg"
+pubDate: 2025-04-20
+description: "Given head, the head of a linked list, determine if the linked list has a cycle in it."
+topics: ["linked-list", "two pointers"]
+---
+
+```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+
+        while(fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow) return true;  
+        }
+
+        return false;
+    }
+}
+```

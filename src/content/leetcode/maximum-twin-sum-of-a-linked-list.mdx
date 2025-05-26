@@ -1,0 +1,56 @@
+---
+title: "Maximum Twin Sum of a Linked List"
+difficulty: "Medium"
+heroImage: "/blog-placeholder-3.jpg"
+pubDate: 2025-04-20
+description: "In a linked list of size n, where n is even, the ith node (0-indexed) of the linked list is known as the twin of the (n-1-i)th node, if 0 <= i <= (n / 2) - 1."
+topics: ["linked-list", "two pointers", "fast slow pointers"]
+---
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int pairSum(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while(fast.next != null && fast.next.next !=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode prev = null;
+        ListNode current =  slow.next;
+
+        while(current !=null) {
+            ListNode temp = current.next;
+            current.next = prev;
+            prev = current;
+            current = temp;
+        }
+
+        int max = 0;
+        ListNode first = head;
+        ListNode second = prev;
+
+
+        while(second != null) {
+            int sum = first.val + second.val;
+            max = Math.max(max, sum);
+            first = first.next;
+            second = second.next;
+        }
+
+        return max;
+    }
+}
+```
