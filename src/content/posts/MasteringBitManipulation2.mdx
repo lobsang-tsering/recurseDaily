@@ -1,0 +1,405 @@
+---
+title: "Bit Manipulation"
+pubDate: "May 26 2025"
+description: "Thinking patterns to solve leetcode problems."
+topics: ["bit manipulation"]
+---
+# Mastering Bit Manipulation in Java
+
+Welcome to this comprehensive guide to mastering bit manipulation in Java, tailored for LeetCode and competitive programming. Bit manipulation involves operating on numbers at the bit level, leveraging their binary representation to solve problems efficiently. This tutorial takes you from beginner to advanced, covering intuition, philosophy, use cases, pitfalls, and deep insights, with practical Java examples. Inspired by *Competitive Programmer’s Handbook* by Antti Laaksonen, it emphasizes practical techniques and common patterns. A mind map is included for quick revision.
+
+## Table of Contents
+
+- [Why Learn Bit Manipulation?](#why-learn-bit-manipulation)
+- [Step 1: Understanding Bits and Binary](#step-1-understanding-bits-and-binary)
+  - [Basics](#basics)
+  - [KeyOperators](#key-operators)
+  - [Example: Basic Operations](#example-basic-operations)
+- [Step 2: Core Bit Manipulation Techniques](#step-2-core-bit-manipulation-techniques)
+  - [Checking if a Bit is Set](#checking-if-a-bit-is-set)
+  - [Setting a Bit](#setting-a-bit)
+  - [Clearing a Bit](#clearing-a-bit)
+  - [Toggling a Bit](#toggling-a-bit)
+  - [Getting the Lowest Set Bit](#getting-the-lowest-set-bit)
+- [Step 3: XOR Magic](#step-3-xor-magic)
+  - [Example: Single Number (LeetCode #136)](#example-single-number-leetcode-136)
+- [Step 4: Advanced Techniques](#step-4-advanced-techniques)
+  - [Counting Set Bits](#counting-set-bits)
+  - [Finding Missing Number (LeetCode #268)](#finding-missing-number-leetcode-268)
+  - [Single Number II (LeetCode #137)](#single-number-ii-leetcode-137)
+  - [Sum of Two Integers (LeetCode #371)](#sum-of-two-integers-leetcode-371)
+  - [Power of Two (LeetCode #231)](#power-of-two-leetcode-231)
+- [Step 5: Common Bit Manipulation Tricks](#step-5-common-bit-manipulation-tricks)
+  - [Check if Power of 2](#check-if-power-of-2)
+  - [Find Next Power of 2](#find-next-power-of-2)
+  - [Generate Subsets with Bitmasks](#generate-subsets-with-bitmasks)
+- [Step 6: Philosophy of Bit Manipulation](#step-6-philosophy-of-bit-manipulation)
+- [Step 7: Practical Use Cases](#step-7-practical-use-cases)
+- [Step 8: Optimization and Error Handling](#step-8-optimization-and-error-handling)
+- [Step 9: Common Patterns](#step-9-common-patterns)
+- [Step 10: Practice Plan](#step-10-practice-plan)
+- [Step 11: Mind Map for Revision](#step-11-mind-map-for-revision)
+- [Conclusion](#conclusion)
+
+## Why Learn Bit Manipulation?
+
+Bit manipulation is a powerful technique for optimizing solutions, especially in competitive programming. It’s used to:
+- Solve problems with minimal space complexity (often O(1)).
+- Perform operations faster than arithmetic methods.
+- Tackle problems involving binary patterns, such as finding unique numbers or detecting duplicates.
+
+**Philosophy**: Think of bit manipulation as toggling switches (0s and 1s). By mastering these operations, you unlock elegant solutions to complex problems, as emphasized in *Competitive Programmer’s Handbook*.
+
+## Step 1: Understanding Bits and Binary
+
+### Basics
+A bit is the smallest unit of data: `0` or `1`. In Java, `int` is 32 bits, and `long` is 64 bits. For example:
+- Decimal `5` = Binary `0101`.
+- Decimal `-5` = Binary `1111...1011` (two’s complement).
+
+### Key Operators
+Java provides bitwise operators:
+- **AND (`&`)**: `1 & 1 = 1`, else `0`.
+- **OR (`|`)**: `0 | 0 = 0`, else `1`.
+- **XOR (`^`)**: `1 ^ 0 = 1`, `0 ^ 1 = 1`, else `0`.
+- **NOT (`~`)**: Flips bits (`~0 = 1`, `~1 = 0`).
+- **Left Shift (`<<`)**: Shifts bits left, fills with 0s (e.g., `5 << 1 = 10`, or `1010`).
+- **Right Shift (`>>`)**: Shifts bits right, preserves sign bit.
+- **Unsigned Right Shift (`>>>`)**: Shifts bits right, fills with 0s.
+
+**Intuition**: Bits are like a row of light switches. Each operator changes their state in a specific way.
+
+### Example: Basic Operations
+```java
+public class BitBasics {
+    public static void main(String[] args) {
+        int a = 5;  // 0101
+        int b = 3;  // 0011
+        System.out.println("AND: " + (a & b));  // 0001 = 1
+        System.out.println("OR: " + (a | b));   // 0111 = 7
+        System.out.println("XOR: " + (a ^ b));  // 0110 = 6
+        System.out.println("NOT a: " + (~a));   // ...1010 = -6
+        System.out.println("Left Shift: " + (a << 1));  // 1010 = 10
+        System.out.println("Right Shift: " + (a >> 1)); // 0010 = 2
+    }
+}
+```
+
+**Key Insight**: Practice converting numbers to binary manually to build intuition. For example, `5 & 3 = 0101 & 0011 = 0001 = 1`.
+
+## Step 2: Core Bit Manipulation Techniques
+
+### Checking if a Bit is Set
+To check if the `i`-th bit of `n` is 1:
+- Use `n & (1 << i)`.
+```java
+boolean isBitSet(int n, int i) {
+    return (n & (1 << i)) != 0;
+}
+```
+**Use Case**: Check if a number is odd (`n & 1`).
+
+### Setting a Bit
+To set the `i`-th bit to 1:
+- Use `n | (1 << i)`.
+```java
+int setBit(int n, int i) {
+    return n | (1 << i);
+}
+```
+
+### Clearing a Bit
+To set the `i`-th bit to 0:
+- Use `n & ~(1 << i)`.
+```java
+int clearBit(int n, int i) {
+    return n & ~(1 << i);
+}
+```
+
+### Toggling a Bit
+To flip the `i`-th bit:
+- Use `n ^ (1 << i)`.
+```java
+int toggleBit(int n, int i) {
+    return n ^ (1 << i);
+}
+```
+
+### Getting the Lowest Set Bit
+To find the rightmost 1:
+- Use `n & -n` (works due to two’s complement).
+```java
+int lowestSetBit(int n) {
+    return n & -n;
+}
+```
+**Use Case**: Fenwick Trees or binary indexed trees.
+
+**Pitfall**: Negative numbers in Java use two’s complement, so test edge cases (`n = 0`, `n = -1`).
+
+## Step 3: XOR Magic
+
+XOR is powerful due to:
+- **A ^ A = 0** (self-cancellation).
+- **A ^ 0 = A** (identity).
+- **Commutative/Associative**.
+
+### Example: Single Number (LeetCode #136)
+**Problem**: Find the number that appears once in an array where others appear twice.
+```java
+public class SingleNumber {
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+}
+```
+**Intuition**: Pairs cancel out, leaving the single number.
+
+**Pitfall**: Assumes exactly one single number. Verify problem constraints.
+
+## Step 4: Advanced Techniques
+
+### Counting Set Bits
+Count the number of 1s in a number:
+```java
+int countSetBits(int n) {
+    int count = 0;
+    while (n != 0) {
+        n &= (n - 1);  // Clear lowest set bit
+        count++;
+    }
+    return count;
+}
+```
+**Use Case**: Hamming Weight (LeetCode #191).
+
+### Finding Missing Number (LeetCode #268)
+**Problem**: Find the missing number in `[0, n]`.
+```java
+public class MissingNumber {
+    public int missingNumber(int[] nums) {
+        int result = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            result ^= i ^ nums[i];
+        }
+        return result;
+    }
+}
+```
+
+### Single Number II (LeetCode #137)
+**Problem**: Every number appears three times except one.
+```java
+public class SingleNumberII {
+    public int singleNumber(int[] nums) {
+        int ones = 0, twos = 0;
+        for (int num : nums) {
+            ones = (ones ^ num) & ~twos;
+            twos = (twos ^ num) & ~ones;
+        }
+        return ones;
+    }
+}
+```
+**Intuition**: Track numbers appearing once and twice modulo 3.
+
+### Sum of Two Integers (LeetCode #371)
+**Problem**: Calculate `a + b` without using `+` or `-`.
+```java
+public class SumOfTwoIntegers {
+    public int getSum(int a, int b) {
+        while (b != 0) {
+            int carry = (a & b) << 1;
+            a = a ^ b;
+            b = carry;
+        }
+        return a;
+    }
+}
+```
+**Intuition**: XOR computes sum without carry; AND and left shift handle carry.
+
+### Power of Two (LeetCode #231)
+**Problem**: Check if a number is a power of 2.
+```java
+public class PowerOfTwo {
+    public boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+}
+```
+**Intuition**: Powers of 2 have exactly one 1 bit (e.g., `8 = 1000`). `n & (n - 1)` clears the lowest 1, resulting in 0.
+
+## Step 5: Common Bit Manipulation Tricks
+
+Inspired by Laaksonen’s emphasis on combinatorial and optimization tricks:
+
+### Check if Power of 2
+Already covered in LeetCode #231 above.
+
+### Find Next Power of 2
+Find the smallest power of 2 greater than or equal to `n`:
+```java
+int nextPowerOfTwo(int n) {
+    if (n <= 0) return 1;
+    n--;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    return n + 1;
+}
+```
+**Intuition**: Spread the highest 1 bit to all lower positions, then add 1.
+
+**Use Case**: Memory allocation or resizing arrays.
+
+### Generate Subsets with Bitmasks
+Generate all subsets of a set using bitmasks:
+```java
+void printSubsets(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < (1 << n); i++) {
+        System.out.print("{ ");
+        for (int j = 0; j < n; j++) {
+            if ((i & (1 << j)) != 0) {
+                System.out.print(arr[j] + " ");
+            }
+        }
+        System.out.println("}");
+    }
+}
+```
+**Intuition**: Each bit represents whether an element is included (1) or not (0).
+
+**Use Case**: Subsets (LeetCode #78).
+
+## Step 6: Philosophy of Bit Manipulation
+
+**Mindset**:
+- **Think in Binary**: Visualize numbers as bit patterns.
+- **Pattern Recognition**: Identify problems involving pairs or binary properties.
+- **Minimalism**: Achieve O(1) space complexity.
+
+**Deep Knowledge**:
+- Combine bit manipulation with other techniques (e.g., two-pointers).
+- Understand two’s complement: `-n = ~n + 1`.
+- Use bitmasks for state compression in combinatorial problems (per Laaksonen).
+
+## Step 7: Practical Use Cases
+
+1. **Bitmasks**: Represent sets or flags.
+2. **Optimization**: Swap numbers without a temp variable:
+```java
+void swap(int[] arr, int i, int j) {
+    arr[i] ^= arr[j];
+    arr[j] ^= arr[i];
+    arr[i] ^= arr[j];
+}
+```
+3. **Encoding/Decoding**: Store multiple values in one integer.
+4. **LeetCode Problems**:
+   - Single Number (#136, #137, #260).
+   - Missing Number (#268).
+   - Number of 1 Bits (#191).
+   - Reverse Bits (#190).
+   - Sum of Two Integers (#371).
+   - Power of Two (#231).
+
+## Step 8: Optimization and Error Handling
+
+- **When to Use Bit Manipulation**: Use when space is critical (O(1)) or arithmetic operations are restricted. Avoid for simple problems where clarity is more important.
+- **Performance**: Bit operations are fast but test against arithmetic solutions, as modern compilers optimize well.
+- **Error Handling**:
+  - **Overflow**: Java’s `int` is 32 bits. For large numbers, use `long` or modulo operations.
+  - **Sign Bit**: Use `>>>` for unsigned shifts with negative numbers.
+  - **Edge Cases**: Test `0`, `-1`, `Integer.MAX_VALUE`, and `Integer.MIN_VALUE`.
+
+## Step 9: Common Patterns
+
+Inspired by Laaksonen’s pattern-based approach:
+- **XOR for Pairs**: Use XOR to cancel duplicates (Single Number).
+- **Bitmasks for Subsets**: Represent choices in combinatorial problems.
+- **Clear Lowest Bit**: `n & (n - 1)` for powers of 2 or bit counting.
+- **Carry in Addition**: Use XOR and AND for arithmetic without operators.
+- **Bit Checking**: Isolate specific bits for flags or conditions.
+
+## Step 10: Practice Plan
+
+1. **Beginner**: Single Number (#136), Power of Two (#231).
+2. **Intermediate**: Missing Number (#268), Number of 1 Bits (#191).
+3. **Advanced**: Single Number II (#137), Sum of Two Integers (#371).
+4. **Challenge**: Subsets (#78), Bitwise AND of Numbers Range (#201).
+
+## Step 11: Mind Map for Revision
+
+```mermaid
+graph TD
+    A[Bit Manipulation in Java] --> B(Basics)
+    A --> C(Operators)
+    A --> D(Techniques)
+    A --> E(Tricks)
+    A --> F(Use Cases)
+    A --> G(Pitfalls)
+    A --> H(Patterns)
+    A --> I(LeetCode Problems)
+
+    B --> B1[Bits: 0 or 1]
+    B --> B2[Binary Representation]
+    B --> B3[Two’s Complement]
+
+    C --> C1[AND (&)]
+    C --> C2[OR (|)]
+    C --> C3[XOR (^)]
+    C --> C4[NOT (~)]
+    C --> C5[Left Shift (<<)]
+    C --> C6[Right Shift (>>)]
+    C --> C7[Unsigned Right Shift (>>>)]
+
+    D --> D1[Check Bit]
+    D --> D2[Set Bit]
+    D --> D3[Clear Bit]
+    D --> D4[Toggle Bit]
+    D --> D5[Count Set Bits]
+    D --> D6[Lowest Set Bit]
+
+    E --> E1[Power of 2]
+    E --> E2[Next Power of 2]
+    E --> E3[Subsets with Bitmasks]
+
+    F --> F1[Bitmasks]
+    F --> F2[Optimization (e.g., Swap)]
+    F --> F3[Encoding/Decoding]
+    F --> F4[Unique/Missing Numbers]
+
+    G --> G1[Sign Bit Issues]
+    G --> G2[Overflow]
+    G --> G3[Edge Cases]
+
+    H --> H1[XOR for Pairs]
+    H --> H2[Bitmasks for Subsets]
+    H --> H3[Clear Lowest Bit]
+    H --> H4[Carry in Addition]
+    H --> H5[Bit Checking]
+
+    I --> I1[Single Number (#136)]
+    I --> I2[Missing Number (#268)]
+    I --> I3[Number of 1 Bits (#191)]
+    I --> I4[Single Number II (#137)]
+    I --> I5[Sum of Two Integers (#371)]
+    I --> I6[Power of Two (#231)]
+```
+
+**How to Use**: Paste into a Mermaid-compatible tool (e.g., Mermaid Live Editor) to visualize. Review each branch to recall concepts.
+
+## Conclusion
+
+Bit manipulation is a Swiss Army knife for competitive programmers. With this tutorial, inspired by *Competitive Programmer’s Handbook*, you’ve learned core techniques, advanced tricks, and common patterns. Practice the listed problems, use the mind map for revision, and experiment with binary conversions to master bit manipulation.
+
+Happy coding!
