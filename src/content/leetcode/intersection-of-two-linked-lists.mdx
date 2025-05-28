@@ -1,0 +1,28 @@
+---
+title: "Intersection of Two Linked Lists"
+pubDate: "May 27 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: "Given the head of a singly linked list, return true if it is a palindrome or false otherwise."
+topics: ["linked list", "two pointers"]
+---
+
+
+
+```java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+
+        ListNode a = headA, b = headB;
+
+        while(a != b){
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+
+        return a;
+    }
+}
+
+```

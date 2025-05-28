@@ -1,0 +1,27 @@
+---
+title: "Remove Duplicates from Sorted List"
+pubDate: "May 27 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: "Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well."
+topics: ["linked list", "Recursion"]
+---
+
+```java
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode current = head;
+
+        while(current != null && current.next != null) {
+            if(current.val == current.next.val)
+                current.next = current.next.next;
+            else 
+                current = current.next;
+        }
+
+        return head;
+    }
+}
+
+```

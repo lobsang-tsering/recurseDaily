@@ -1,0 +1,42 @@
+---
+title: "Remove Linked List Elements"
+pubDate: "May 27 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: "Given the head of a linked list and an integer val, remove all the nodes of the linked list that has Node.val == val, and return the new head."
+topics: ["linked list", "Recursion"]
+---
+
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode p = dummy;
+
+        while(p != null && p.next != null) {
+            if(p.next.val == val) {
+                // Skip the node with the target value
+                p.next = p.next.next;
+            } else {
+                // Only move to the next node if no removal was done
+                p = p.next;
+            }
+        }
+
+        return dummy.next;
+    }
+}
+```

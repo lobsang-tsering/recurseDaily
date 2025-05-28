@@ -1,0 +1,518 @@
+---
+title: "Recursion"
+pubDate: "May 26 2025"
+description: "Thinking patterns to solve leetcode problems."
+topics: ["bit manipulation"]
+---
+
+# Comprehensive Guide to Mastering Recursion for LeetCode in Java
+
+This guide is a definitive resource for mastering recursion to solve LeetCode problems efficiently. It provides a deep dive into recursive thinking, including decision tree visualization, call stack mechanics, and advanced optimization techniques. All examples are in Java, with clear explanations, practical strategies, and a curated practice plan to ensure you can tackle any recursion-based problem with confidence.
+
+## Table of Contents
+
+- [Introduction to Recursion](#introduction-to-recursion)
+  - [What is Recursion?](#what-is-recursion)
+  - [Why Use Recursion for LeetCode?](#why-use-recursion-for-leetcode)
+- [Recursive Thinking: The Decision Tree Perspective](#recursive-thinking-the-decision-tree-perspective)
+  - [Visualizing Problems as Decision Trees](#visualizing-problems-as-decision-trees)
+  - [Example: Subsets (LeetCode #78)](#example-subsets-leetcode-78)
+- [Understanding the Call Stack](#understanding-the-call-stack)
+  - [How the Call Stack Works](#how-the-call-stack-works)
+  - [Example: Factorial with Call Stack Trace](#example-factorial-with-call-stack-trace)
+  - [Debugging with Call Stack Insights](#debugging-with-call-stack-insights)
+- [Common Recursive Patterns for LeetCode](#common-recursive-patterns-for-leetcode)
+  - [Pattern 1: Divide and Conquer](#pattern-1-divide-and-conquer)
+  - [Pattern 2: Backtracking](#pattern-2-backtracking)
+  - [Pattern 3: Dynamic Programming with Recursion](#pattern-3-dynamic-programming-with-recursion)
+  - [Pattern 4: Tree/Graph Recursion](#pattern-4-treegraph-recursion)
+- [Systematic Approach to Solve Recursive Problems](#systematic-approach-to-solve-recursive-problems)
+  - [Step-by-Step Process](#step-by-step-process)
+  - [Example: Reverse a Linked List (LeetCode #206)](#example-reverse-a-linked-list-leetcode-206)
+- [Advanced Optimization Techniques](#advanced-optimization-techniques)
+  - [Memoization](#memoization)
+  - [Tail Recursion](#tail-recursion)
+  - [Converting to Iterative Solutions](#converting-to-iterative-solutions)
+- [Avoiding Common Pitfalls](#avoiding-common-pitfalls)
+  - [Infinite Recursion](#infinite-recursion)
+  - [Stack Overflow](#stack-overflow)
+  - [State Management Errors](#state-management-errors)
+  - [Missing Edge Cases](#missing-edge-cases)
+- [Curated Practice Plan](#curated-practice-plan)
+  - [Week-by-Week Schedule](#week-by-week-schedule)
+  - [Recommended Problems by Pattern](#recommended-problems-by-pattern)
+- [Visualization and Debugging Strategies](#visualization-and-debugging-strategies)
+  - [Drawing Decision Trees](#drawing-decision-trees)
+  - [Tracing the Call Stack](#tracing-the-call-stack)
+  - [Using Debugging Tools](#using-debugging-tools)
+- [Final Tips for Mastery](#final-tips-for-mastery)
+- [Resources for Further Learning](#resources-for-further-learning)
+
+## Introduction to Recursion
+
+### What is Recursion?
+
+Recursion is a technique where a function calls itself to solve smaller instances of the same problem. It’s like breaking a complex puzzle into smaller, identical pieces until you reach a piece simple enough to solve directly.
+
+**Key Components**:
+
+- **Base Case**: The condition that terminates recursion, preventing infinite calls.
+- **Recursive Case**: The part where the function calls itself with a smaller input.
+- **Call Stack**: The system’s mechanism to track recursive calls, storing each call’s state (arguments, variables) until resolution.
+
+**Example**: Factorial of `n` (n! = n × (n-1) × ... × 1).
+
+```java
+public class Factorial {
+    public int factorial(int n) {
+        if (n == 0 || n == 1) return 1; // Base case
+        return n * factorial(n - 1); // Recursive case
+    }
+}
+```
+
+### Why Use Recursion for LeetCode?
+
+- **Natural Fit**: Many LeetCode problems (trees, graphs, permutations) have recursive structures.
+- **Elegant Code**: Recursive solutions are often concise and align with mathematical induction.
+- **Common Patterns**: Recursion appears in divide-and-conquer, backtracking, dynamic programming, and tree/graph problems.
+
+## Recursive Thinking: The Decision Tree Perspective
+
+### Visualizing Problems as Decision Trees
+
+A decision tree is a powerful mental model for recursion, where each node represents a decision point, and branches represent choices leading to subproblems. This perspective clarifies how recursion explores all possible solutions.
+
+- **Root**: The initial problem state.
+- **Nodes**: Intermediate states after making a decision.
+- **Leaves**: Base cases where recursion stops.
+- **Edges**: Recursive calls with modified inputs.
+
+### Example: Subsets (LeetCode #78)
+
+**Problem**: Given an array `nums`, return all possible subsets (the power set).
+
+**Decision Tree for `nums = [1, 2]`**:
+
+```
+Start: []
+   /           \
+Include 1    Exclude 1
+[1]           []
+ / \          / \
+[1,2] [1]   [2] []
+```
+
+Each path from root to leaf represents a subset: `[]`, `[1]`, `[2]`, `[1,2]`.
+
+**Java Code**:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(nums, 0, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private void backtrack(int[] nums, int start, List<Integer> curr, List<List<Integer>> result) {
+        result.add(new ArrayList<>(curr)); // Base case: add current subset
+        
+        for (int i = start; i < nums.length; i++) {
+            curr.add(nums[i]); // Decision: include nums[i]
+            backtrack(nums, i + 1, curr, result); // Recurse
+            curr.remove(curr.size() - 1); // Undo decision
+        }
+    }
+}
+```
+
+**Decision Tree Insight**:
+
+- Each node decides whether to include or exclude a number.
+- The recursion explores all branches, adding each subset at the leaves.
+- Backtracking ensures the state is reset for exploring other paths.
+
+**How to Apply**:
+
+1. Sketch the decision tree for a small input (e.g., `n=2`).
+2. Identify decisions (e.g., include/exclude, left/right).
+3. Map decisions to recursive calls, ensuring progress toward the base case.
+
+## Understanding the Call Stack
+
+### How the Call Stack Works
+
+The call stack manages recursive execution by:
+
+- Pushing a new frame for each recursive call, storing arguments, local variables, and return address.
+- Popping frames when a base case is reached, resolving calls in reverse order.
+- Risking stack overflow for deep recursion without proper base cases.
+
+### Example: Factorial with Call Stack Trace
+
+```java
+public class Factorial {
+    public int factorial(int n) {
+        if (n == 0 || n == 1) return 1; // Base case
+        return n * factorial(n - 1); // Recursive case
+    }
+}
+```
+
+**Call Stack for `factorial(4)`**:
+
+1. `factorial(4)` pushes frame: `n=4`, calls `factorial(3)`.
+2. `factorial(3)` pushes frame: `n=3`, calls `factorial(2)`.
+3. `factorial(2)` pushes frame: `n=2`, calls `factorial(1)`.
+4. `factorial(1)` hits base case, returns `1`, pops frame.
+5. Unwind:
+   - `factorial(2)`: `2 * 1 = 2`, pops frame.
+   - `factorial(3)`: `3 * 2 = 6`, pops frame.
+   - `factorial(4)`: `4 * 6 = 24`, pops frame.
+
+**Visualization**:
+
+```
+Stack: [factorial(4)]
+Stack: [factorial(4), factorial(3)]
+Stack: [factorial(4), factorial(3), factorial(2)]
+Stack: [factorial(4), factorial(3), factorial(2), factorial(1)]
+Stack: [factorial(4), factorial(3), factorial(2)] → returns 1
+Stack: [factorial(4), factorial(3)] → returns 2
+Stack: [factorial(4)] → returns 6
+Stack: [] → returns 24
+```
+
+### Debugging with Call Stack Insights
+
+- **Print Statements**: Add `System.out.println("Entering factorial(" + n + ")")` to trace calls.
+- **Debugger**: Use an IDE (e.g., IntelliJ) to step through frames and inspect variables.
+- **Stack Trace**: If a stack overflow occurs, check if the base case is reachable or if inputs are too large.
+
+## Common Recursive Patterns for LeetCode
+
+LeetCode recursion problems fall into predictable patterns. Mastering these patterns allows you to quickly map problems to solutions.
+
+### Pattern 1: Divide and Conquer
+
+- Split the problem into independent subproblems, solve them, and combine results.
+- Example: **Merge Two Sorted Lists** (LeetCode #21).
+
+**Java Code**:
+
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2; // Base case
+        if (l2 == null) return l1; // Base case
+        
+        if (l1.val <= l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2); // Recursive case
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next); // Recursive case
+            return l2;
+        }
+    }
+}
+```
+
+**Decision Tree**: Choose the smaller node, recurse on remaining lists.
+
+### Pattern 2: Backtracking
+
+- Explore all possibilities, undoing invalid choices.
+- Example: **Permutations** (LeetCode #46).
+
+**Java Code**:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(nums, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private void backtrack(int[] nums, List<Integer> curr, List<List<Integer>> result) {
+        if (curr.size() == nums.length) { // Base case
+            result.add(new ArrayList<>(curr));
+            return;
+        }
+        
+        for (int num : nums) {
+            if (!curr.contains(num)) { // Avoid duplicates
+                curr.add(num);
+                backtrack(nums, curr, result);
+                curr.remove(curr.size() - 1); // Backtrack
+            }
+        }
+    }
+}
+```
+
+**Decision Tree**: Each node chooses a number; branches are remaining choices.
+
+### Pattern 3: Dynamic Programming with Recursion
+
+- Cache results to avoid recomputing overlapping subproblems.
+- Example: **Climbing Stairs** (LeetCode #70).
+
+**Java Code**:
+
+```java
+import java.util.HashMap;
+
+class Solution {
+    public int climbStairs(int n) {
+        HashMap<Integer, Integer> memo = new HashMap<>();
+        return climbStairsHelper(n, memo);
+    }
+    
+    private int climbStairsHelper(int n, HashMap<Integer, Integer> memo) {
+        if (n <= 2) return n; // Base case
+        if (memo.containsKey(n)) return memo.get(n); // Cache hit
+        
+        int ways = climbStairsHelper(n - 1, memo) + climbStairsHelper(n - 2, memo);
+        memo.put(n, ways); // Cache result
+        return ways;
+    }
+}
+```
+
+**Call Stack Insight**: Memoization reduces redundant calls, e.g., `climbStairs(2)` is computed once.
+
+### Pattern 4: Tree/Graph Recursion
+
+- Traverse or process nodes recursively.
+- Example: **Maximum Depth of Binary Tree** (LeetCode #104).
+
+**Java Code**:
+
+```java
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0; // Base case
+        int leftDepth = maxDepth(root.left); // Recursive case
+        int rightDepth = maxDepth(root.right);
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+}
+```
+
+**Decision Tree**: Explore left and right subtrees, combine depths.
+
+## Systematic Approach to Solve Recursive Problems
+
+### Step-by-Step Process
+
+1. **Understand the Problem**: Clarify inputs, outputs, and constraints.
+2. **Identify Base Case**: Find the simplest case where the answer is immediate.
+3. **Define Recursive Case**: Break the problem into smaller subproblems.
+4. **Visualize Decision Tree**: Sketch choices for a small input.
+5. **Trace Call Stack**: Simulate execution for a small input.
+6. **Write Code**: Implement base and recursive cases, handling edge cases.
+7. **Optimize**: Use memoization or iteration if needed.
+8. **Test**: Run with small inputs, edge cases, and large inputs.
+
+### Example: Reverse a Linked List (LeetCode #206)
+
+**Problem**: Reverse a singly linked list.
+
+**Java Code**:
+
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head; // Base case
+        ListNode newHead = reverseList(head.next); // Recursive case
+        head.next.next = head; // Adjust pointers
+        head.next = null;
+        return newHead;
+    }
+}
+```
+
+**Decision Tree**:
+
+- Each node reverses the rest of the list and links the current node.
+- Leaf is a single node (no reversal needed).
+
+**Call Stack Trace** for `[1,2,3]`:
+
+1. `reverseList(1->2->3)` calls `reverseList(2->3)`.
+2. `reverseList(2->3)` calls `reverseList(3)`.
+3. `reverseList(3)` returns `3`.
+4. `reverseList(2->3)`: `newHead=3`, sets `3.next=2`, `2.next=null`, returns `3->2`.
+5. `reverseList(1->2->3)`: `newHead=3->2`, sets `2.next=1`, `1.next=null`, returns `3->2->1`.
+
+## Advanced Optimization Techniques
+
+### Memoization
+
+Cache results to avoid recomputing overlapping subproblems.
+
+- **When to Use**: When the same subproblems are solved multiple times (e.g., Fibonacci, Climbing Stairs).
+- **Example**: Enhanced `factorial` with memoization.
+
+```java
+import java.util.HashMap;
+
+public class Factorial {
+    public int factorial(int n, HashMap<Integer, Integer> memo) {
+        if (n == 0 || n == 1) return 1;
+        if (memo.containsKey(n)) return memo.get(n);
+        int result = n * factorial(n - 1, memo);
+        memo.put(n, result);
+        return result;
+    }
+}
+```
+
+### Tail Recursion
+
+Structure recursive calls as the last operation to potentially optimize stack usage (Java doesn’t optimize tail recursion, but it’s good practice).
+
+- **Example**: Tail-recursive factorial.
+
+```java
+public class Factorial {
+    public int factorialTail(int n, int acc) {
+        if (n <= 1) return acc;
+        return factorialTail(n - 1, n * acc);
+    }
+    // Call as: factorialTail(5, 1)
+}
+```
+
+### Converting to Iterative Solutions
+
+For large inputs, convert recursive solutions to iterative ones using a stack or loop to avoid stack overflow.
+
+- **Example**: Iterative **Reverse a Linked List**.
+
+```java
+class Solution {
+    public ListNode reverseListIterative(ListNode head) {
+        ListNode prev = null, curr = head;
+        while (curr != null) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+}
+```
+
+## Avoiding Common Pitfalls
+
+### Infinite Recursion
+
+- **Cause**: Missing or incorrect base case, or recursive calls that don’t reduce problem size.
+- **Solution**: Ensure base case is reachable and inputs shrink.
+- **Example**: In `factorial`, ensure `n` approaches `0` or `1`.
+
+### Stack Overflow
+
+- **Cause**: Deep recursion for large inputs.
+- **Solution**: Use memoization, tail recursion, or iterative solutions.
+- **Example**: For large trees, consider iterative DFS using a stack.
+
+### State Management Errors
+
+- **Cause**: Failing to reset state in backtracking.
+- **Solution**: Undo changes after recursive calls (e.g., remove elements from lists).
+- **Example**: In `subsets`, `curr.remove()` ensures clean state.
+
+### Missing Edge Cases
+
+- **Cause**: Not handling `null`, empty inputs, or boundary values.
+- **Solution**: Test with edge cases (e.g., empty list, single node).
+- **Example**: In **Max Depth**, handle `root == null`.
+
+## Curated Practice Plan
+
+### Week-by-Week Schedule
+
+- **Week 1**: Solve 6 Easy problems (1-2 per day).
+- **Week 2**: Solve 5 Medium problems.
+- **Week 3**: Solve 4 Hard problems.
+- **Week 4**: Revisit problems, optimize solutions, and convert 2-3 recursive solutions to iterative.
+
+### Recommended Problems by Pattern
+
+| Pattern                 | Easy                                  | Medium                                 | Hard                                  |
+|-------------------------|---------------------------------------|----------------------------------------|---------------------------------------|
+| Divide and Conquer      | Merge Two Sorted Lists (#21)          | Sort List (#148)                      | Merge K Sorted Lists (#23)           |
+|                         | Maximum Depth of Binary Tree (#104)   | Kth Smallest Element in a BST (#230)  |                                       |
+| Backtracking            | Binary Tree Paths (#257)             | Permutations (#46)                    | N-Queens (#51)                       |
+|                         |                                       | Subsets (#78)                         | Word Search II (#212)                |
+| Dynamic Programming     | Climbing Stairs (#70)                | Longest Increasing Subsequence (#300) | Regular Expression Matching (#10)    |
+|                         | Fibonacci Number (#509)              | House Robber (#198)                   | Word Break II (#140)                 |
+| Tree/Graph Recursion    | Symmetric Tree (#101)                | Construct Binary Tree (#105)          | Binary Tree Maximum Path Sum (#124) |
+|                         | Same Tree (#100)                    |                                       |                                       |
+
+## Visualization and Debugging Strategies
+
+### Drawing Decision Trees
+
+- Sketch trees for small inputs to visualize choices.
+- **Example**: For **Subsets** with `[1,2]`, draw include/exclude paths.
+
+### Tracing the Call Stack
+
+- Manually simulate calls for small inputs.
+- **Example**: For `factorial(3)`, trace: `factorial(3) → factorial(2) → factorial(1)`.
+
+### Using Debugging Tools
+
+- Add print statements to log state (e.g., `System.out.println("Current node: " + node.val)`).
+- Use an IDE debugger to step through recursive calls and inspect stack frames.
+- Check stack traces for overflow errors to identify missing base cases.
+
+## Final Tips for Mastery
+
+- **Pattern Recognition**: Categorize each problem by pattern (e.g., backtracking, tree recursion).
+- **Inductive Thinking**: Assume smaller subproblems are solved correctly, focus on combining results.
+- **Practice Consistently**: Solve 1-2 problems daily, increasing difficulty.
+- **Review and Reflect**: After solving, analyze time/space complexity and alternative approaches.
+- **Convert to Iterative**: Practice rewriting recursive solutions iteratively to deepen understanding.
+- **Simulate Small Inputs**: Always test with small cases to verify logic.
+
+## Resources for Further Learning
+
+- **LeetCode**: “Recursion I” and “Recursion II” learning paths.
+- **Books**:
+  - *Cracking the Coding Interview* by Gayle Laakmann McDowell.
+  - *Introduction to Algorithms* by Cormen et al.
+- **Videos**: NeetCode, Tech With Tim, or Abdul Bari’s recursion tutorials on YouTube.
+- **Platforms**: LeetCode (Recursion tag), HackerRank, Codeforces.
+
+This guide equips you with the tools, mindset, and practice plan to master recursion for LeetCode. By leveraging decision trees, understanding the call stack, and practicing systematically, you’ll solve any recursion-based problem with ease. If you need a deeper dive into a specific problem or pattern, let me know!
