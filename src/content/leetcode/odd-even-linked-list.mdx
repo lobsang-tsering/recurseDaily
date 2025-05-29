@@ -1,0 +1,75 @@
+---
+title: "Odd Even Linked List"
+pubDate: "May 16 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Easy"
+description: ""
+topics: ["Linked List", "two pointers"]
+---
+
+
+
+```java
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if(head == null || head.next == null) return head;
+
+        ListNode odds = new ListNode(0);
+        ListNode evens = new ListNode(0);
+
+        ListNode p1 = odds;
+        ListNode p2 = evens;
+        ListNode curr = head;
+        int index = 1;
+
+        while(curr != null) {
+            if(index % 2 != 0) {
+                p1.next = curr;
+                p1 = curr;
+            } else {
+                p2.next = curr;
+                p2 = curr;
+            }
+
+            curr = curr.next;
+            index++;
+        }
+
+        p1.next = evens.next;
+        p2.next = null;
+
+        return odds.next;
+    }
+}
+
+```
+
+# Other Approach
+
+```java
+public class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) return null;
+        ListNode odd = head, even = head.next, evenHead = even;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+}
+```
