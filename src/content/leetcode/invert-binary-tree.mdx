@@ -1,0 +1,40 @@
+---
+title: "Invert Binary Tree"
+difficulty: "Easy"
+heroImage: "/blog-placeholder-3.jpg"
+pubDate: 2025-04-20
+description: "Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null."
+topics: [ "recursion", "tree", "breadth-first-search" ]
+---
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if(root == null) return null;
+
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+
+        invertTree(root.left);
+        invertTree(root.right);
+
+        return root;  
+    }
+}
+```

@@ -1,0 +1,48 @@
+
+---
+title: "Partition List"
+difficulty: "Easy"
+heroImage: "/blog-placeholder-3.jpg"
+pubDate: 2025-04-20
+description: "Given the head of a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x."
+topics: [ "linked-list", "two pointers" ]
+---
+
+```
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        ListNode p1 = new ListNode(0);
+        ListNode p2 = new ListNode(0);
+        ListNode curr = head;
+
+        ListNode smaller = p1;
+        ListNode bigger = p2;
+
+        while(curr != null) {
+            if(curr.val < x ) {
+                p1.next = curr;
+                p1 = p1.next;
+            } else {
+                p2.next = curr;
+                p2 = p2.next;
+            }
+
+            curr = curr.next;
+        }
+
+        p1.next = bigger.next;
+        p2.next = null;
+        return smaller.next;
+    }
+}
+```

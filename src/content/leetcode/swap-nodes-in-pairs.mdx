@@ -1,0 +1,21 @@
+---
+title: "Swap Nodes in Pairs"
+pubDate: "May 30 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Medium"
+description: ""
+topics: ["Linked List", "recursion"]
+---
+
+```java
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head == null || head.next == null) return head;
+        ListNode p = head.next;
+        ListNode rest = p.next;
+        p.next = head;
+        head.next = swapPairs(rest);
+        return p;
+    }
+}
+```

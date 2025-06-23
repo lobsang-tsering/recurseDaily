@@ -1,0 +1,52 @@
+---
+title: "Remove Duplicates from Sorted List II"
+pubDate: "May 16 2025"
+heroImage: "/blog-placeholder-3.jpg"
+difficulty: "Medium"
+description: ""
+topics: ["Linked List", "two pointers"]
+---
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+
+        ListNode curr = head;
+        int n = 1;
+
+        while(curr.next != null) {
+            curr = curr.next;
+            n++;
+        }
+
+        ListNode last = curr;
+        k = k % n;
+        if(k == 0) return head;
+
+        curr = head;
+        
+        for(int i = 0; i < n - k - 1; i++){
+            curr = curr.next;
+        }
+
+
+        ListNode newTail = curr;
+        ListNode newHead = curr.next;
+        last.next = head;
+        newTail.next = null;
+
+        return newHead;
+    }
+}
+```
